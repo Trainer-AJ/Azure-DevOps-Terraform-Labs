@@ -33,6 +33,7 @@ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/Your-Subs
    
 ### 2. Create two Azure Resource Groups:
 1. Create a `main.tf` file like below:
+   
 ```tf
 # ----------------------------------------------------
 # LAB: 1 SetUp Terraform 
