@@ -5,9 +5,10 @@ lab:
 ---
 
 # Lab Requirements:
-Follow [Lab-1](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/Instructions/0-Lab_Setup_Env.html) to setup things. 
+Follow **[Lab-1](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/Instructions/0-Lab_Setup_Env.html)** to setup things. 
 
 # Lab Task:
+**TERRAFORM DOC TO FOLLOW:** [azurerm_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group)
 1. **Authenticate Terraform to Azure using service principal**
 2. **Create two Azure Resource Groups:**
    
@@ -31,6 +32,58 @@ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/Your-Subs
 4. Open the Newly created `creds.txt` file to see your credentials.
    
 ### 2. Create two Azure Resource Groups:
+1. Create a `main.tf` file like below:
+```tf
+# ----------------------------------------------------
+# LAB: 1 SetUp Terraform 
+# AUTHOR: Ananay Ojha
+# ---------------------------------------------------
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.85.0"
+    }
+  }
+  # required_version = "value"
+}
+
+# AFter AZ Login command, Create a service Principal In Azure Using below Command
+# az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/20000000-0000-0000-0000-000000000000"
+
+provider "azurerm" {
+  # Configuration options
+  features {}
+# NOTE : ADD AUTHENTICATION DETAILS HERE {DIY}
+}
+
+# ----------------------------------------------
+# Now You Can Create Resources Here
+
+# CREATE A RESOURCE GROUP
+
+resource "azurerm_resource_group" "first" {
+  provider = azurerm.azure-pass
+  name     = "Dev-RG-1"
+  location = "EastUS"
+  tags = {
+    "Env" = "Dev"
+  }
+}
+
+resource "azurerm_resource_group" "second" {
+  provider = azurerm.azure-pass
+  name     = "UAT-RG-1"
+  location = "Central India"
+  tags = {
+    "Env" = "UAT"
+  }
+}
+
+```
+2. Run `terraform init`
+3. run `terraform plan`
+4. run `terraform apply` enter `YES` when asked for confirmation
 
 ### 3. Verify In Azure Portal 
 1. Login to `https://portal.azure.com/`
