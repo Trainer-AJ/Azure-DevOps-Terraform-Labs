@@ -1,0 +1,19 @@
+remote_theme: Ananyojha/Jekyll-Theme
+exclude:
+  - readme.md
+  - .github/
+header_pages:
+  - index.html
+author: Ananay Ojha
+Linkedin_username: Ananay Ojha
+github_username:  AnanyOjha
+plugins:
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jemoji
+markdown: kramdown
+kramdown:
+   syntax_highlighter_opts:
+      disable : true
+
+theme: jekyll-theme-slate
