@@ -1,3 +1,4 @@
+# How Which varaibles preceeds - terminal, default or tfvar for rg name
 terraform {
   required_providers {
     azurerm = {
