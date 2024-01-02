@@ -11,7 +11,7 @@ provider "azurerm" {
 }
 
 module "vnet" {
-  source = "../modules/network"
+  source = "../modules"
   rg_name = "module-tf-rg"
   public_subnet_range = ["172.31.1.0/24", "172.31.5.0/24"]
 }
