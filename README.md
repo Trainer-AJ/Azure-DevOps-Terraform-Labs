@@ -1,5 +1,7 @@
 # Azure-DevOps-Terraform-Labs
 
+### [Labs Link](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/)
+
 # IMPORTANT ⚠️
 Use below Pre-Commit Hook to Avoid Pushing Your Secrets:
 ```sh
