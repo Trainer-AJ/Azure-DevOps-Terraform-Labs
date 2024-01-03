@@ -1,0 +1,49 @@
+trigger:
+- None
+
+pool:
+  name: labs
+  demands: terraform 
+
+variables:
+- name: plan
+  value: runtime.tfplan
+
+steps:
+- task: CopyFiles@2
+  displayName: "Copy Required Files"
+  inputs:
+    SourceFolder: 'Codes'
+    Contents: '2-vars-meta-args.tf'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PowerShell@2
+  displayName: "Verify If everything in Place !"
+  inputs:
+    targetType: 'inline'
+    script: |
+      pwd
+      ls
+      terraform --version
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+- task: AzureCLI@2
+  displayName: "Terraform init"
+  inputs:
+    azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      terraform init
+      terraform plan -out="$(plan)" -var "location=uaenorth"
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+- task: AzureCLI@2
+  displayName: "Terraform Apply"
+  inputs:
+    azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'terraform apply -auto-approve $(plan)'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
