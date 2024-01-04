@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Validate lab environment'
+    title: 'Set Up lab environment'
     module: 'Module 0: Welcome'
 ---
 
@@ -45,35 +45,32 @@ lab:
 
 > **Note**: make sure you completed the steps to create your Azure DevOps Organization before continuing with these steps.
 
-In this exercise, you will set up the prerequisites for the lab, which consist of a new Azure DevOps project with a repository based on the [eShopOnWeb](https://github.com/MicrosoftLearning/eShopOnWeb).
+In this exercise, you will set up the prerequisites for the lab, which consist of a new Azure DevOps project with a repository based on the [AJ's Github](https://github.com/Trainer-AJ/Azure-DevOps-Terraform-Labs).
 
 #### Task 1:  Create and configure the team project
 
-In this task, you will create an **eShopOnWeb** Azure DevOps project to be used by several labs.
+In this task, you will create an **TF-CI-CD** Azure DevOps project to be used by several labs.
 
 1. On your lab computer, in a browser window open your Azure DevOps organization. Click on **New Project**. Give your project the following settings:
-    - name: **eShopOnWeb**
+    - name: **TF-CI-CD**
     - visibility: **Private**
     - Advanced: Version Control: **Git**
-    - Advanced: Work Item Process: **Scrum**
+    - Advanced: Work Item Process: **Agile**
 
 2. Click **Create**.
 
     ![Create Project](images/create-project.png)
 
-#### Task 2:  Import eShopOnWeb Git Repository
+#### Task 2:  Import TF-CI-CD Git Repository
 
-In this task you will import the eShopOnWeb Git repository that will be used by several labs.
+In this task you will import the TF-CI-CD Git repository that will be used by several labs.
 
-1. On your lab computer, in a browser window open your Azure DevOps organization and the previously created **eShopOnWeb** project. Click on **Repos>Files** , **Import a Repository**. Select **Import**. On the **Import a Git Repository** window, paste the following URL https://github.com/MicrosoftLearning/eShopOnWeb.git  and click **Import**:
+1. On your lab computer, in a browser window open your Azure DevOps organization and the previously created **TF-CI-CD** project. Click on **Repos>Files** , **Import a Repository**. Select **Import**. On the **Import a Git Repository** window, paste the following URL https://github.com/MicrosoftLearning/TF-CI-CD.git  and click **Import**:
 
     ![Import Repository](images/import-repo.png)
 
 2. The repository is organized the following way:
-    - **.ado** folder contains Azure DevOps YAML pipelines.
-    - **.devcontainer** folder container setup to develop using containers (either locally in VS Code or GitHub Codespaces).
-    - **.azure** folder contains Bicep&ARM infrastructure as code templates used in some lab scenarios.
-    - **.github** folder container YAML GitHub workflow definitions.
-    - **src** folder contains the .NET 7 website used on the lab scenarios.
+ - **imp-links.md** for link to all important documentation links
+ - **codes** folder that has all codes
 
 You have now completed the necessary prerequisite steps to continue with the different individual labs
