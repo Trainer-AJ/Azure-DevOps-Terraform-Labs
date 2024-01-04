@@ -2,7 +2,7 @@ resource "azurerm_network_interface" "this" {
   name                = "vm-nic"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
-
+depends_on = [ azurerm_public_ip.this,azurerm_network_security_group.this ]
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.this.id

@@ -1,0 +1,88 @@
+# Key vault in YAML:
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/release/key-vault-in-own-project?view=azure-devops&tabs=portal
+# trigger:
+# - main
+
+# pr:
+# - '*'
+trigger: 
+- None
+
+pool:
+  name: labs
+  demands:  terraform 
+
+parameters:
+- name: env
+  displayName: "Current Environment" 
+  type: string
+  default: dev-test
+  values:
+  - 'dev-test'
+  - 'pre-prod'
+  - prod
+
+
+stages:
+ - stage: A
+   jobs:
+   - job: A1
+     steps:
+     - task: PowerShell@2
+       inputs:
+         filePath: 'Codes/azure-vm-via-exec/ssh-keygen.ps1'
+         workingDirectory: 'Codes/azure-vm-via-exec'
+         
+   - job: A2
+     steps:
+      - task: AzureKeyVault@2
+        inputs:
+         azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+         KeyVaultName: 'kv-devops0098'
+         SecretsFilter: '*'
+         RunAsPreJob: true
+          
+      - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+        workingDirectory: Codes/azure-vm-via-exec
+        continueOnError: True
+      
+
+      - powershell: |
+          terraform init -backend-config="blob.tfbackend" 
+          terraform plan -out="${{ parameters.env }}.tfplan"
+        env:
+          ARM_ACCESS_KEY: $(KEY)
+        workingDirectory: Codes/azure-vm-via-exec
+        ignoreLASTEXITCODE: True
+        continueOnError: True
+        
+      - powershell: |
+            terraform init -backend-config="blob.tfbackend"
+            terraform apply "${{ parameters.env }}.tfplan"
+        env:
+            ARM_ACCESS_KEY: $(KEY)
+        ignoreLASTEXITCODE: true
+        workingDirectory: 'Codes/azure-vm-via-exec'
+    
+
+
+          
+          
+     
+
+    #  - powershell: |
+    #       $Env:ARM_TENANT_ID = "$(TENANT)"
+    #       $Env:ARM_SUBSCRIPTION_ID = "$(SUBSCRIPTION)"
+    #       $Env:ARM_CLIENT_SECRET = "$(SECRET)"
+    #       $Env:ARM_CLIENT_ID = "$(SP)"
+          
+    #  - powershell: 'echo $Env:ARM_CLIENT_ID'
+   # - job: A2
+
+# - stage: B
+#   jobs:
+#   - job: B1
+#   - job: B2
+
+
+

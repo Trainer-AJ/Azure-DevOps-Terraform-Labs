@@ -25,7 +25,7 @@ resource "azurerm_linux_virtual_machine" "this" {
     sku       = "22_04-lts"
     version   = "latest"
   }
- user_data = filebase64("./install_wordpress.sh")
+ # user_data = filebase64("./install_wordpress.sh")
 
  provisioner "file" {
    source = "${path.module}/test.sh"
