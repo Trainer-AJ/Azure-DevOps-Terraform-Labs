@@ -38,8 +38,9 @@ In this task, you will create an **Azure-DevOps-Terraform-Labs** Azure DevOps pr
 
 In this task you will import the Azure-DevOps-Terraform-Labs Git repository that will be used by several labs.
 
-1. On your lab computer, in a browser window open your Azure DevOps organization and the previously created **Azure-DevOps-Terraform-Labs** project. Click on **Repos>Files** , **Import a Repository**. Select **Import**. On the **Import a Git Repository** window, paste the following URL https://github.com/MicrosoftLearning/Azure-DevOps-Terraform-Labs.git  and click **Import**:
+1. On your lab computer, in a browser window open your Azure DevOps organization and the previously created **Azure-DevOps-Terraform-Labs** project. Click on **Repos>Files** , **Import a Repository**. Select **Import**. On the **Import a Git Repository** window, paste the following URL https://github.com/Trainer-AJ/Azure-DevOps-Terraform-Labs.git  and click **Import**:
 
     ![Import Repository](images/import-repo.png)
+   
 [MS Docs](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/create-organization?toc=%2Fazure%2Fdevops%2Fget-started%2Ftoc.json&view=azure-devops#create-an-organization)
 
