@@ -80,25 +80,37 @@ stages:
         ignoreLASTEXITCODE: true
         workingDirectory: 'Codes/azure-vm-via-exec'
     
-
-
+ - stage: B
+   displayName: "Terraform Destroy"
+   jobs:
+      - job: A
+        steps:
+        - task: AzureKeyVault@2
+          inputs:
+            azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+            KeyVaultName: 'kv-devops0098'
+            SecretsFilter: '*'
+            RunAsPreJob: true
           
-          
-     
+        - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+          workingDirectory: Codes/azure-vm-via-exec
+          continueOnError: True
 
-    #  - powershell: |
-    #       $Env:ARM_TENANT_ID = "$(TENANT)"
-    #       $Env:ARM_SUBSCRIPTION_ID = "$(SUBSCRIPTION)"
-    #       $Env:ARM_CLIENT_SECRET = "$(SECRET)"
-    #       $Env:ARM_CLIENT_ID = "$(SP)"
-          
-    #  - powershell: 'echo $Env:ARM_CLIENT_ID'
-   # - job: A2
-
-# - stage: B
-#   jobs:
-#   - job: B1
-#   - job: B2
+        - powershell: |
+            terraform init -backend-config="blob.tfbackend" 
+            terraform plan -destroy -out="destroy.tfplan"
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
+        
+        - powershell: 'terraform apply "destroy.tfplan"'
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
 
 
 
