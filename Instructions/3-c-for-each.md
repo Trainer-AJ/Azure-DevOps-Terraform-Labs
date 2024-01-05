@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Terraform Meta Arguments'
+    title: 'Setting Up Environments using For-Each block'
     module: 'Module 6: Terraform Meta Arguments'
 ---
 ## Tasks:
