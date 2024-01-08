@@ -59,8 +59,8 @@ cd .git/hooks
 
 2. Rename `pre-commit.sample` to `pre-commit` and copy paste below code :
 ```sh
-echo "" 
-echo ******* This is Pre-commit Hook ********
+echo " " 
+echo "******* This is Pre-commit Hook ********"
 ```
 
 3. Verify
