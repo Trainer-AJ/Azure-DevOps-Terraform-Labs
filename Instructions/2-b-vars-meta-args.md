@@ -14,3 +14,6 @@ lab:
 | List-RG | East US | | Name, Location | List | Custom Tfvars FIle |
 
 2. **[Optional] Create 3 diffrent Azure Resource Groups in 3 locations - "East US", "Central India", "South India" respectively**
+
+## Instructions:
+1. The Terraform code is [here](../Codes/2-vars-meta-args.tf)

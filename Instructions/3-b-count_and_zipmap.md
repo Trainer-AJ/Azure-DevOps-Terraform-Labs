@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Terraform Meta Arguments'
+    title: 'Terraform Meta Arguments - Count and ZipMap functions'
     module: 'Module 6: Terraform Meta Arguments'
 ---
 
@@ -16,3 +16,6 @@ ip = {
       + terraform-ip-2 = (known after apply)
     }
 ```
+
+## Instructions 
+**Check `Terraform Code` [here](../Codes/ip/main.tf)** 
