@@ -2,7 +2,7 @@
 
 ### [Labs Link](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/)
 
-### [Check all Iportant Links to revise here](imp-links.md)
+### [Check all Important Links to revise here](imp-links.md)
 
 # IMPORTANT ⚠️
 Use below Pre-Commit Hook to Avoid Pushing Your Secrets:
