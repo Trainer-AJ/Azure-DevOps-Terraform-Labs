@@ -62,3 +62,5 @@ cd .git/hooks
 echo "" 
 echo ******* This is Pre-commit Hook ********
 ```
+
+3. Verify
