@@ -64,3 +64,5 @@ echo ******* This is Pre-commit Hook ********
 ```
 
 3. Verify
+
+## **Push new Terraform code to v1 Branch in Azure Repo**
