@@ -32,8 +32,6 @@ connection {
      host = azurerm_linux_virtual_machine.vm1.public_ip_address
      user = var.vm-user
      private_key = file("~/.ssh/id_rsa")
-     script_path = "~/script_%RAND%.sh"
-
    }
 
 provisioner "remote-exec" {
