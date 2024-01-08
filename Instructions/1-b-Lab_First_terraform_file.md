@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'IaC With Terraform'
+    title: 'Intro to IaC - Creating Resource Groups'
     module: 'Module 2: Terraform basics'
 ---
 

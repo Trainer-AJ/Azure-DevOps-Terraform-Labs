@@ -23,6 +23,42 @@ lab:
 
 ## Instructions:
 ## 1. **Create Azure Repo**
+1. In your `Azure-DevOps-Terraform-Labs` Project Click **Repo**
+ ![Create-Repo](../images/azure-repo-homepage.png)
 
+2. Click on Last Option which says `initialise`
+> This creates an empty Repo in your Project, where you can push your code 
+3. On Top Right corner => Click `Clone` => nOw click on `generate credentials`
 
+![gen-creds](../images/3-repo-gen-creds.png)
 
+> copy and store them for Future Reference
+
+4. Make sure you are in the same folder where you have you terraform Code to Push (the one whihc was created in the previous lab) ==> Now Open Terminal in your VS Code and run the following commands:
+
+```sh
+git config --global user.name "YOUR COPIED USERNAME HERE"
+git config --global user.email "THE EMAIL USED FOR SIGN IN TO AZURE DEVOPS"
+```
+5. To Push the local Code to Azure Repo Run:
+
+```sh
+git add .
+git commit -m "Pushing to Azure Repo"
+git push 
+```
+
+6. Now when prompted, provide the copied password 
+
+## 3. **Add Git hook**
+1. Navigate to `.git` directory
+
+```
+cd .git/hooks
+```
+
+2. Rename `pre-commit.sample` to `pre-commit` and copy paste below code :
+```sh
+echo "" 
+echo ******* This is Pre-commit Hook ********
+```
