@@ -10,3 +10,15 @@ output "private_subnet_id" {
 output "public_subnet_id" {
   value = azurerm_subnet.public-subnet[*].id
 }
+
+output "rg-name" {
+    value = azurerm_resource_group.this.name
+}
+
+output "rg-location" {
+  value = azurerm_resource_group.this.location
+}
+
+output "nic-id" {
+    value = azurerm_network_interface.this.id
+}

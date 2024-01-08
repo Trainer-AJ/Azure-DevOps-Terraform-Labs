@@ -1,0 +1,4 @@
+resource_group_name  = "agent"
+storage_account_name = "mangu753487"
+container_name       = "terraform"
+key                  = "vm.tfstate"

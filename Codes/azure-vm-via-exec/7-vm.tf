@@ -25,34 +25,39 @@ resource "azurerm_linux_virtual_machine" "this" {
     sku       = "22_04-lts"
     version   = "latest"
   }
- # user_data = filebase64("./install_wordpress.sh")
+  # user_data = filebase64("./install_wordpress.sh")
 
- provisioner "file" {
-   source = "${path.module}/test.sh"
-   destination = "/tmp/test.sh"
-   connection {
-     type = "ssh"
-     host = azurerm_linux_virtual_machine.this.public_ip_address
-     user = "ananay"
-     private_key = file("~/.ssh/id_rsa")
-   }
- }
-
-provisioner "remote-exec" {
-  inline = [ 
-    "chmod +x /tmp/test.sh",
-    "/tmp/test.sh"
-   ]
   connection {
-     type = "ssh"
-     host = azurerm_linux_virtual_machine.this.public_ip_address
-     user = "ananay"
-     private_key = file("~/.ssh/id_rsa")
-   }
-}
+    type        = "ssh"
+    host        = azurerm_linux_virtual_machine.this.public_ip_address
+    user        = "ananay"
+    private_key = file("~/.ssh/id_rsa")
+    
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/test.sh"
+    destination = "/tmp/test.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      #!/bin/bash
+      "chmod +x /tmp/test.sh",
+      "sed -i 's/\r$//' /tmp/test.sh" ,
+      "/tmp/test.sh"
+    ]
+    #   connection {
+    #      type = "ssh"
+    #      host = azurerm_linux_virtual_machine.this.public_ip_address
+    #      user = "ananay"
+    #      private_key = file("~/.ssh/id_rsa")
+    #    }
+  }
+
   provisioner "local-exec" {
-    on_failure = continue
-    command = "Write-Host ************************ My name is Mangu ! ************************"
-    interpreter = [ "Powershell", "-Command" ]
+    on_failure  = continue
+    command     = "Write-Host ************************ My name is Mangu ! ************************"
+    interpreter = ["Powershell", "-Command"]
   }
 }
