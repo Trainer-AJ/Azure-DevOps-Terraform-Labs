@@ -59,10 +59,18 @@ cd .git/hooks
 
 2. Rename `pre-commit.sample` to `pre-commit` and copy paste below code :
 ```sh
+#!/bin/sh
 echo " " 
 echo "******* This is Pre-commit Hook ********"
 ```
 
-3. Verify
+3. Verify results bu running 
+```
+git add .
+git commit -m "testv2"
+```
+
+![hook](../images/pre-commit-hoook.png)
+
 
 ## **Push new Terraform code to v1 Branch in Azure Repo**
