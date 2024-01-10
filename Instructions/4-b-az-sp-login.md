@@ -85,7 +85,178 @@ b. Now Your key vault should like below:
 
 ## 3. Add Variable Group with Key Vault 
 
-/Codes/Pipelines/key-vault-multi-stage-vm-v1.yml
+1. #### Task 3: Create a Variable Group connected to Azure Key Vault
+
+In this task, you will create a Variable Group in Azure DevOps that will retrieve the ACR password secret from Key Vault using the Service Connection (Service Principal).
+
+1. On your lab computer, start a web browser and navigate to the Azure DevOps project **Azure-DevOps-Terraform-Labs**.
+
+2. In the vertical navigational pane of the of the Azure DevOps portal, select **Pipelines>Library**. Click on **+ Variable Group**.
+
+3. On the **New variable group** blade, specify the following settings:
+
+    | Setting | Value |
+    | --- | --- |
+    | Variable Group Name | **key-vault** |
+    | Link secrets from an Azure Key Vault | **enable** |
+    | Azure subscription | **Available Azure service connection > Azure subs** |
+    | Key vault name | Your key vault name|
+
+![](../images/create-var-grp.png)
+
+4. Under **Variables**, click on **+ Add** and select the **All Secrets**. Click on **OK**.
+
+![](../images/check-all-kv.png)
+
+5. Click on **Save**.
+
+## Create Azure Pipelines
+
+1. In Azure Repo Import Repo if not done => 
+```git 
+https://github.com/Trainer-AJ/Azure-DevOps-Terraform-Labs.git
+```
+
+> Be sure to change the Backend configurations with yours 
+
+Navigate to `Codes/azure-vm-via-exec/blob.tfbackend` and change with `your values`
+
+**Sample:**
+```txt
+# ----------------------- THIS IS SAMPLE DO NOT COPY ----------------
+resource_group_name  = "key-vault-RG"
+storage_account_name = "backend9028"
+container_name       = "terraform"
+key                  = "vm.tfstate"
+```
+
+
+1. Pipleines => **+ New pipeline** => choose **Azure-DevOps-Terraform-Labs** labs Repo => **Starter Pipeline**
+
+2. Copy paste below Yaml Code in the pipeline:
+
+```yml
+
+# Key vault in YAML:
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/release/key-vault-in-own-project?view=azure-devops&tabs=portal
+# trigger:
+# - main
+
+# pr:
+# - '*'
+trigger: 
+- None
+
+pool:
+  name: Default
+# pool:
+#   vmImage : Windows-latest
+
+parameters:
+- name: env
+  displayName: "Current Environment" 
+  type: string
+  default: dev-test
+  values:
+  - 'dev-test'
+  - 'pre-prod'
+  - prod
+
+variables:
+- group: key-vault
+- name: plan
+  value: ${{ parameters.env }}.tfplan
+
+stages:
+ - stage: A
+   jobs:
+   - job: A1
+     steps:
+      - task: PowerShell@2
+        inputs:
+         filePath: 'Codes/azure-vm-via-exec/ssh-keygen.ps1'
+         workingDirectory: 'Codes/azure-vm-via-exec'
+      # - task: TerraformInstaller@1
+      #   inputs:
+      #     terraformVersion: 'latest'
+         
+   - job: A2
+     steps:
+      # - task: AzureKeyVault@2
+      #   inputs:
+      #    azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+      #    KeyVaultName: 'kv-devops0098'
+      #    SecretsFilter: '*'
+      #    RunAsPreJob: true
+          
+      - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+        workingDirectory: Codes/azure-vm-via-exec
+        continueOnError: True
+      
+
+      - powershell: |
+          terraform init -backend-config="blob.tfbackend" 
+          terraform plan -out="$(plan)"
+        env:
+          ARM_ACCESS_KEY: $(KEY)
+        workingDirectory: Codes/azure-vm-via-exec
+        ignoreLASTEXITCODE: True
+        continueOnError: True
+
+      - powershell: |
+          $filePath = "$(plan)"
+
+          if (Test-Path $filePath) {
+              Write-Host "File found: $(ls $filePath)"
+              exit 0
+          } else {
+              Write-Host "Error: No Terraform Plan File not found - $filePath"
+              exit 1
+          }
+        displayName: "Check Tfplan file"
+        workingDirectory: Codes/azure-vm-via-exec
+        
+      - powershell: |
+            terraform init -backend-config="blob.tfbackend"
+            terraform apply -auto-approve "${{ parameters.env }}.tfplan"
+        env:
+            ARM_ACCESS_KEY: $(KEY)
+        ignoreLASTEXITCODE: true
+        workingDirectory: 'Codes/azure-vm-via-exec'
+    
+ - stage: B
+   displayName: "Terraform Destroy"
+   jobs:
+      - job: A
+        steps:
+        # - task: AzureKeyVault@2
+        #   inputs:
+        #     azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+        #     KeyVaultName: 'kv-devops0098'
+        #     SecretsFilter: '*'
+        #     RunAsPreJob: true
+          
+        - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+          workingDirectory: Codes/azure-vm-via-exec
+          continueOnError: True
+
+        - powershell: |
+            terraform init -backend-config="blob.tfbackend" 
+            terraform plan -destroy -out="destroy.tfplan"
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
+        
+        - powershell: 'terraform apply "destroy.tfplan"'
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
+
+```
 
 
 
