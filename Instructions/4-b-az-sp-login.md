@@ -85,7 +85,149 @@ b. Now Your key vault should like below:
 
 ## 3. Add Variable Group with Key Vault 
 
-/Codes/Pipelines/key-vault-multi-stage-vm-v1.yml
+## Open Azure Repo and change the Values in file: `Codes/azure-vm-via-exec/blob.tfbackend` with your values: 
+
+**SAMPLE**:
+
+```
+resource_group_name  = "key-vault-RG"
+storage_account_name = "backend9028"
+container_name       = "terraform"
+key                  = "vm.tfstate"
+```
+
+2. Open Pipelines create 
+
+```yml
+# Key vault in YAML:
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/release/key-vault-in-own-project?view=azure-devops&tabs=portal
+
+# trigger:
+# - main
+
+# pr:
+# - '*'
+trigger: 
+- None
+# ----------------------------------------------------------------------------
+pool:
+  name: Default
+  demands:
+  - Agent.Name -equals DESKTOP-MJ4DF8L
+  # ADD YOU AGENT NAME ABOVE
+# -----------------------------------------------------------------------------------
+# pool:
+#   vmImage : Windows-latest
+
+parameters:
+- name: env
+  displayName: "Current Environment" 
+  type: string
+  default: dev-test
+  values:
+  - 'dev-test'
+  - 'pre-prod'
+  - prod
+
+variables:
+- group: key-vault
+- name: plan
+  value: ${{ parameters.env }}.tfplan
+
+stages:
+ - stage: A
+   jobs:
+   - job: A1
+     steps:
+      - task: PowerShell@2
+        inputs:
+         filePath: 'Codes/azure-vm-via-exec/ssh-keygen.ps1'
+         workingDirectory: 'Codes/azure-vm-via-exec'
+      # - task: TerraformInstaller@1
+      #   inputs:
+      #     terraformVersion: 'latest'
+         
+   - job: A2
+     steps:
+      # - task: AzureKeyVault@2
+      #   inputs:
+      #    azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+      #    KeyVaultName: 'kv-devops0098'
+      #    SecretsFilter: '*'
+      #    RunAsPreJob: true
+          
+      - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+        workingDirectory: Codes/azure-vm-via-exec
+        continueOnError: True
+      
+
+      - powershell: |
+          terraform init -backend-config="blob.tfbackend" 
+          terraform plan -out="$(plan)"
+        env:
+          ARM_ACCESS_KEY: $(KEY)
+        workingDirectory: Codes/azure-vm-via-exec
+        displayName: "Init and Plan"
+        ignoreLASTEXITCODE: True
+        continueOnError: True
+
+      - powershell: |
+          $filePath = "$(plan)"
+
+          if (Test-Path $filePath) {
+              Write-Host "File found: $(ls $filePath)"
+              exit 0
+          } else {
+              Write-Host "Error: No Terraform Plan File not found - $filePath"
+              exit 1
+          }
+        displayName: "Check Tfplan file"
+        workingDirectory: Codes/azure-vm-via-exec
+        
+      - powershell: |
+            terraform init -backend-config="blob.tfbackend"
+            terraform apply -auto-approve "${{ parameters.env }}.tfplan"
+        env:
+            ARM_ACCESS_KEY: $(KEY)
+        ignoreLASTEXITCODE: true
+        workingDirectory: 'Codes/azure-vm-via-exec'
+    
+ - stage: B
+   displayName: "Terraform Destroy"
+   jobs:
+      - job: A
+        steps:
+        # - task: AzureKeyVault@2
+        #   inputs:
+        #     azureSubscription: 'Azure Pass - Sponsorship(602d8824-0a01-43e7-b0ac-421c816e6f3b)'
+        #     KeyVaultName: 'kv-devops0098'
+        #     SecretsFilter: '*'
+        #     RunAsPreJob: true
+          
+        - script: 'az login --service-principal -u $(SP) -p $(SECRET) --tenant $(TENANT)'
+          workingDirectory: Codes/azure-vm-via-exec
+          continueOnError: True
+
+        - powershell: |
+            terraform init -backend-config="blob.tfbackend" 
+            terraform plan -destroy -out="destroy.tfplan"
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
+        
+        - powershell: 'terraform apply "destroy.tfplan"'
+          env:
+            ARM_ACCESS_KEY: $(KEY)
+          workingDirectory: Codes/azure-vm-via-exec
+          ignoreLASTEXITCODE: True
+          continueOnError: True
+
+
+
+
+```
 
 
 
