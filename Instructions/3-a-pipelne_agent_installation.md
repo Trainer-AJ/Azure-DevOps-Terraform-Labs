@@ -37,6 +37,8 @@ lab:
 
 12. Start Windows PowerShell as administrator and in the **Administrator: Windows PowerShell** console run the following lines to create the **C:\\agent** directory and extract the content of the downloaded archive into it.
 
+> Note: run command - pwd if required run  cd C:\Users\admin to switch to users directory
+
     ```powershell
     cd \
     mkdir agent ; cd agent
@@ -113,4 +115,4 @@ lab:
 
     > **WARNING**: Be careful with copy/paste, make sure you have same indentation shown above.
 
-    ![Yaml pool syntax](../images/add%20agent%20my%20yaml.pngimages/)
+    ![Yaml pool syntax](../images/add-agent-my-yaml.png)
