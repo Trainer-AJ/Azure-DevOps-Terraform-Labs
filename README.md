@@ -5,7 +5,9 @@
 ### [Check all Important Links to revise here](imp-links.md)
 
 # IMPORTANT ⚠️
-Use below Pre-Commit Hook to Avoid Pushing Your Secrets:
+- You need a remote backend as each new commit triggers new pipeline...
+- so it will go crazy saying import resources to terraform (no state file ... TF can't maintain previously created resources via terraform) !
+- Use below Pre-Commit Hook to Avoid Pushing Your Secrets:
 ```sh
 #!/bin/bash
 
