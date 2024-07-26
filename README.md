@@ -1,6 +1,6 @@
 # Azure-DevOps-Terraform-Labs
 
-### [Labs Link](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/)
+### [Labs Link](https://trainer-aj.github.io/Azure-DevOps-Terraform-Labs/Instructions/3-a-pipelne_agent_installation.html)
 
 ### [Check all Important Links to revise here](imp-links.md)
 
