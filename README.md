@@ -4,6 +4,8 @@
 
 ### [Check all Important Links to revise here](imp-links.md)
 
+[We recommend using either a Service Principal or Managed Service Identity when running Terraform non-interactively (such as when running Terraform in a CI server) - and authenticating using the Azure CLI when running Terraform locally](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_oidc)
+
 # IMPORTANT ⚠️
 - You need a remote backend as each new commit triggers new pipeline...
 - so it will go crazy saying import resources to terraform (no state file ... TF can't maintain previously created resources via terraform) !
