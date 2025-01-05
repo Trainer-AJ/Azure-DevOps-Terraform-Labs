@@ -38,6 +38,7 @@ done
 exit 0
 ```
 ## terraform state file
+> automatically load the state file from that backend every time you run plan or apply, and it’ll automatically store the state file in that backend after each apply, so there’s no chance of manual error
 1. Isolating state files. When making changes to your infrastructure, it’s a best practice to isolate different environments. For example, when making a change in a testing or staging environment, you want to be sure that there is no way you can accidentally break production. But how can you isolate your changes if all of your infrastructure is defined in the same Terraform state file?
 2. Shared storage for state files. To be able to use Terraform to update your infrastructure, each of your team members needs access to the same Terraform state files. That means you need to store those files in a shared location
 3.` STATE FILE which resources it was supposed to manage`
